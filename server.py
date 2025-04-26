@@ -24,18 +24,21 @@ from pubsub import pub
 # General logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 # JS8Call logging
-js8call_logger = logging.getLogger('js8call')
+js8call_logger = logging.getLogger("js8call")
 js8call_logger.setLevel(logging.DEBUG)
 js8call_handler = logging.StreamHandler()
 js8call_handler.setLevel(logging.DEBUG)
-js8call_formatter = logging.Formatter('%(asctime)s - JS8Call - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S')
+js8call_formatter = logging.Formatter(
+    "%(asctime)s - JS8Call - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S"
+)
 js8call_handler.setFormatter(js8call_formatter)
 js8call_logger.addHandler(js8call_handler)
+
 
 def display_banner():
     banner = """
@@ -49,6 +52,7 @@ Meshtastic Version
 """
     print(banner)
 
+
 def main():
     display_banner()
     args = init_cli_parser()
@@ -60,17 +64,19 @@ def main():
     merge_config(system_config, args)
 
     interface = get_interface(system_config)
-    interface.bbs_nodes = system_config['bbs_nodes']
-    interface.allowed_nodes = system_config['allowed_nodes']
+    interface.bbs_nodes = system_config["bbs_nodes"]
+    interface.allowed_nodes = system_config["allowed_nodes"]
 
-    logging.info(f"TC²-BBS is running on {system_config['interface_type']} interface...")
+    logging.info(
+        f"TC²-BBS is running on {system_config['interface_type']} interface..."
+    )
 
     initialize_database()
 
     def receive_packet(packet, interface):
         on_receive(packet, interface)
 
-    pub.subscribe(receive_packet, system_config['mqtt_topic'])
+    pub.subscribe(receive_packet, system_config["mqtt_topic"])
 
     # Initialize and start JS8Call Client if configured
     js8call_client = JS8CallClient(interface)
@@ -88,6 +94,7 @@ def main():
         interface.close()
         if js8call_client.connected:
             js8call_client.close()
+
 
 if __name__ == "__main__":
     main()

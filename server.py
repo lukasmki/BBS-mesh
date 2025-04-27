@@ -21,6 +21,8 @@ from js8call_integration import JS8CallClient
 from message_processing import on_receive
 from pubsub import pub
 
+from cli_interface import Interface
+
 # General logging
 logging.basicConfig(
     level=logging.INFO,
@@ -86,8 +88,7 @@ def main():
         js8call_client.connect()
 
     try:
-        while True:
-            time.sleep(1)
+        Interface().cmdloop()
 
     except KeyboardInterrupt:
         logging.info("Shutting down the server...")

@@ -22,11 +22,16 @@ def send_message(message, destination, interface):
             )
             destid = get_node_id_from_num(destination, interface)
             chunk = chunk.replace("\n", "\\n")
+            shortName = get_node_short_name(destid, interface)
+
+            if shortName == "SELF":
+                continue
+
             logging.info(
                 f"Sending message to user '{get_node_short_name(destid, interface)}' ({destid}) with sendID {d.id}: \"{chunk}\""
             )
         except Exception as e:
-            logging.info(f"REPLY SEND ERROR {e.message}")
+            logging.info(f"REPLY SEND ERROR {e}")
 
         time.sleep(2)
 
